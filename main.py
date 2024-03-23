@@ -17,7 +17,7 @@ class Main(Scene):
     """the final video."""
 
     def set_font(self):
-        """Set the fonts used in the video."""
+        """set the fonts used in the video."""
         Text.set_default(font="Charis SIL")
         preamble = TexTemplate()
         preamble.add_to_preamble(
@@ -26,8 +26,11 @@ class Main(Scene):
         )
         MathTex.set_default(tex_template=preamble)
 
+    def play_music(self, path: str = "Zeta.mp3"):
+        """play the background music."""
+        self.add_sound(os.path.join(assets, path))
+
     def construct(self):
         """this is the function where everything comes together."""
         self.set_font()
-        self.add_sound(os.path.join(assets, "Zeta.mp3"))
         TitleCard.construct(self)
