@@ -18,10 +18,10 @@ class Main(Scene):
 
     def set_font(self):
         """Set the fonts used in the video."""
-        Text.set_default(font="erewhon")
+        Text.set_default(font="Charis SIL")
         preamble = TexTemplate()
         preamble.add_to_preamble(
-            "\\usepackage{fourier}\n\\usepackage{tgheros}\n\\usepackage{siunitx}",
+            "\\usepackage[charter]{mathdesign}\n\n\\usepackage{siunitx}",
             prepend=True,
         )
         MathTex.set_default(tex_template=preamble)
