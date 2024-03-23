@@ -32,5 +32,8 @@ class Main(Scene):
 
     def construct(self):
         """this is the function where everything comes together."""
+        self.play_music()
         self.set_font()
+
+        # start the scenes in order.
         TitleCard.construct(self)
