@@ -1,4 +1,4 @@
 FILE=main
 
 video .:
-	manim -pql ${FILE}.py
+	manim -pqh ${FILE}.py

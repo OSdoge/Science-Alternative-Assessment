@@ -9,12 +9,8 @@ import os
 from manim import DOWN, FadeIn, FadeOut, ImageMobject, Scene, Text, Write
 
 assets = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "../assets"
-)
-
-assets = os.path.join(
     os.path.dirname(__file__),
-    "../assets/",
+    "../assets",
 )
 
 
