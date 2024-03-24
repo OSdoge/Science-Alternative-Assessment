@@ -8,6 +8,7 @@ from manim import *
 
 
 def CreateAirfoil(scale: int = 2):
+    """points are courtesy of https://nathanrooy.github.io/posts/2016-09-14/airfoil-manipulation-via-bezier-curves-with-python/"""
     """create an airfoil shape."""
     airfoil = VMobject()
     points = [
@@ -35,6 +36,22 @@ def CreateAirfoil(scale: int = 2):
     airfoil.set_stroke(color=BLUE, width=1)
     return airfoil
 
+def Create2DTurbine(scale = 2):
+    group = VGroup()
+    mob = Circle(stroke_color=WHITE, stroke_width=1)
+    mob.scale(scale)
+    group.add(mob)
+    for i in range(16):
+        group.add(Line(mob.get_center(), mob.point_at_angle(22.5 + i * 22.5 * DEGREES), color=WHITE))
+    return group
+
+def CreateTurbine(scale = 2):
+    group = VGroup()
+    mob = Cylinder(height=1, radius=scale, stroke_color=WHITE, direction=X_AXIS, fill_opacity=0)
+    group.add(mob)
+    # create rectangle from centre of cylinder to circumference
+    group.add(Create2DTurbine(scale).rotate(PI / 2, axis=Y_AXIS))
+    return group
 
 class Flow(ThreeDScene):
     """flow of wind into turbines."""
@@ -54,7 +71,7 @@ class Flow(ThreeDScene):
         )
 
         new_airfoil = CreateAirfoil(scale * 1.5)
-        self.play(Transform(airfoil, new_airfoil), GrowArrow(arrow), Create(text))
+        self.play(Transform(airfoil, new_airfoil), GrowArrow(arrow), Write(text))
 
         top_points = [
             [1, 0.001, 0],
@@ -103,9 +120,43 @@ class Flow(ThreeDScene):
         )
 
         # shift all objects to the left
+        
+        # create airfoil that is centered
+        new_airfoil = CreateAirfoil(scale * 1.5)
+        new_airfoil.stroke_color = RED
+        new_airfoil.stroke_width = 3
+        new_airfoil.shift([-new_airfoil.width / 2, 0, 0])
+        new_arrow = arrow.copy().shift([-new_airfoil.width / 2, 0, 0]).set_opacity(0)
+        new_text = text.copy().shift([-new_airfoil.width / 2, 0, 0]).set_opacity(0)
 
+        self.play(Transform(arrow, new_arrow), Transform(text, new_text), Transform(airfoil, new_airfoil))
+        
+        
 
-class TurbineFan(Scene):
+class TurbineFan(ThreeDScene):
     def construct(self):
         """construct the turbine."""
-        self.add(CreateAirfoil(2))
+        cam_orientation = self.camera.get_phi(), self.camera.get_theta()
+        self.set_camera_orientation(phi=PI / 5, theta= -3 * PI / 4)
+        
+        arr = Arrow([-5, 0, 0], [0, 0, 0], color=RED)
+        turbine = CreateTurbine()
+        
+        self.add(turbine)
+        
+        # rotate camera such that we are facing the direction of the arrow
+        self.move_camera(phi= PI / 2, theta=-PI, added_anims=[GrowArrow(arr)], run_time=2)
+        self.remove(arr, turbine)
+        
+        self.play(Transform(turbine, Create2DTurbine().rotate(PI / 2, axis=Y_AXIS).flip()))
+        # reset orientation of camera
+        self.set_camera_orientation(phi=cam_orientation[0], theta=cam_orientation[1])
+        # self.play(Transform(turbine, CreateTurbine()))
+        self.remove(turbine)
+        TurbineFan2D.construct(self)
+
+class TurbineFan2D(Scene):
+    def construct(self):
+        """construct the turbine."""
+        self.add(Create2DTurbine())
+        self.wait(1)
