@@ -6,7 +6,7 @@ the titlecard for the video.
 
 import os
 
-from manim import DOWN, FadeIn, FadeOut, ImageMobject, Scene, Text, Write
+from manim import DOWN, FadeIn, FadeOut, ImageMobject, Scene, Succession, Tex, Text, Write
 
 assets = os.path.join(
     os.path.dirname(__file__),
@@ -26,5 +26,9 @@ class TitleCard(Scene):
         self.play(FadeIn(logo), run_time=2)
         self.play(Write(subtitle))
         self.wait(2)
-        self.play(FadeOut(logo), run_time=2)
-        self.play(FadeOut(subtitle))
+        self.play(Succession(FadeOut(logo), FadeOut(subtitle)))
+
+        disclaimer = Tex(r"\justify All animations are computer-generated and coded out manually.")
+        self.play(FadeIn(disclaimer))
+        self.wait(1)
+        self.play(FadeOut(disclaimer))
