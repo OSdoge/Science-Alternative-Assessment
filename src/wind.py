@@ -131,6 +131,21 @@ class Flow(ThreeDScene):
 
         self.play(Transform(arrow, new_arrow), Transform(text, new_text), Transform(airfoil, new_airfoil))
         
+        note = Text("Note: This explanation is one of the many grossly simplified explanations of lift", color=WHITE, font_size=25).to_edge(DOWN)
+        self.play(Write(note))
+        self.wait(1)
+        
+        push_arrow = Arrow([3, 0, 0], [6, -1, 0], color=RED)
+        text_push = Text("Action", color=WHITE, font_size=20).move_to([5.8, -1.3, 0])
+        self.play(GrowArrow(push_arrow), Write(text_push))
+        self.wait(1)
+        
+        lift_arrow = Arrow([2.2, 0.26, 0], [-0.8, 1, 0], color=RED)
+        text_lift = Text("Reaction", color=WHITE, font_size=20).move_to([-1, 1.3, 0])
+        self.play(GrowArrow(lift_arrow), Write(text_lift))
+        
+        self.wait(1)
+        
         
 
 class TurbineFan(ThreeDScene):
@@ -146,17 +161,49 @@ class TurbineFan(ThreeDScene):
         
         # rotate camera such that we are facing the direction of the arrow
         self.move_camera(phi= PI / 2, theta=-PI, added_anims=[GrowArrow(arr)], run_time=2)
-        self.remove(arr, turbine)
-        
-        self.play(Transform(turbine, Create2DTurbine().rotate(PI / 2, axis=Y_AXIS).flip()))
-        # reset orientation of camera
-        self.set_camera_orientation(phi=cam_orientation[0], theta=cam_orientation[1])
-        # self.play(Transform(turbine, CreateTurbine()))
-        self.remove(turbine)
-        TurbineFan2D.construct(self)
+        self.play(Rotate(turbine, angle=PI / 2, axis=RIGHT, run_time=3))
 
-class TurbineFan2D(Scene):
+class wrongGenerator(ThreeDScene):
     def construct(self):
-        """construct the turbine."""
-        self.add(Create2DTurbine())
+        # construct a cuboid magnet, made up of two cuboids that add up to 4, 2, 1
+        magnet = VGroup()
+        magnet.add(Prism(dimensions=[2, 2, 1], fill_color=RED, stroke_width=1).shift([-1, 0, 0]))
+        magnet.add(Prism(dimensions=[2, 2, 1], fill_color=BLUE, stroke_width=1).shift([1, 0, 0]))
+        # construct a rod with height in the y-axis
+        rod = Cylinder(height=6, radius=0.1, stroke_color=WHITE, stroke_width=1, direction=Y_AXIS).shift([0, 2, 0])
+        self.add(rod)
+        wires = Rectangle(height=6, width=6, stroke_color=WHITE, stroke_width=1, fill_opacity = 0)
+        connecting_wire = Line([0, -3, 0], [0, -10, 0], color=WHITE)
+        self.add(wires, connecting_wire)
+        self.set_camera_orientation(phi= - PI / 5)
+        note = Text("Note: ", color=WHITE, font_size=25).to_edge(DOWN)
+        self.play(Rotate(magnet, angle=6 * PI, axis=UP, run_time=6, rate_func=linear), Rotate(rod, angle=6 * PI, axis=DOWN, run_time=6, rate_func=linear))
+        # move camera slightly up
+        # move camera slightly up and face the magnet
+
+class Generator(ThreeDScene):
+    def construct(self):
+        wires = Rectangle(height=6, width=6, stroke_color=WHITE, stroke_width=1, fill_opacity = 0)
+        connecting_wire = Line([0, -3, 0], [0, -10, 0], color=WHITE)
+        self.add(wires, connecting_wire)
+        self.set_camera_orientation(phi= - PI / 5)
+        magnet_left = Prism(dimensions=[1, 8, 2], fill_color=RED, stroke_width=1).shift([-5, 0, 0])
+        magnet_right = Prism(dimensions=[1, 8, 2], fill_color=BLUE, stroke_width=1).shift([5, 0, 0])
+        self.add(magnet_left, magnet_right)
+        note = Text("Note: This is an AC generator", color=WHITE, font_size=25).to_edge(DOWN).rotate(-PI / 4, axis=RIGHT)
+        self.play(Rotate(wires, angle=24 * PI, axis=UP, run_time=24, rate_func=linear), Write(note))
+
+class MaxwellEq(Scene):
+    def construct(self):
+        faraday = MathTex(r"\nabla \times \vec{E} = -\frac{\partial \vec{B}}{\partial t}").scale(1)
+        self.play(Write(faraday))
+        self.wait(1)
+        delcross_meaning = MathTex(r"\nabla \times \vec{E} \implies \text{curl of } \vec{E}").scale(1)
+        self.play(Transform(faraday[0][0:4], delcross_meaning), Unwrite(faraday[0][4:]))
+        self.wait(1)
+        curl_E = MathTex(r"\text{curl of } \vec{E} = -\frac{\partial \vec{B}}{\partial t}").scale(1)
+        self.play(Transform(faraday, curl_E))
+        self.wait(1)
+        word_eq = MathTex(r"\text{curl of electric field} = -\text{rate of change of magnetic field}").scale(1)
+        self.play(Transform(faraday, word_eq))
         self.wait(1)
