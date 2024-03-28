@@ -6,14 +6,15 @@ main.py
 
 import os
 
-from manim import MathTex, Scene, Text, TexTemplate
+from manim import *
 
 from src.titlecard import TitleCard
+from src.solar import SolarCell
 
 assets = os.path.join(os.path.dirname(os.path.realpath(__file__)), "assets")
 
 
-class Main(Scene):
+class Main(ThreeDScene):
     """the final video."""
 
     def set_font(self):
@@ -37,3 +38,4 @@ class Main(Scene):
 
         # start the scenes in order.
         TitleCard.construct(self)
+        SolarCell.construct(self)
