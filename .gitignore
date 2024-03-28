@@ -2,6 +2,8 @@
 *.svg
 *.tex
 *.mov
+*.aux
+*.png
 partial_movie_file_list.txt
 
 __pycache__/
