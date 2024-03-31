@@ -207,3 +207,47 @@ class MaxwellEq(Scene):
         word_eq = MathTex(r"\text{curl of electric field} = -\text{rate of change of magnetic field}").scale(1)
         self.play(Transform(faraday, word_eq))
         self.wait(1)
+
+class Steam2(Scene):
+    def construct(self):
+        geothermal_src = Ellipse(color= BLUE_E, fill_opacity=1).shift([-4, -2, 0]) 
+        text = Text("Hot Water Source", color=WHITE).next_to(geothermal_src, DOWN, buff=0.1).scale(0.5)
+        note = Text("(Heated from biodiesel or geothermal energy)", color=WHITE).next_to(text, DOWN, buff=0.1).scale(0.3)
+        self.play(Create(geothermal_src), Write(text), Write(note))
+        
+        turbine = RoundedRectangle(corner_radius=0.5, color= MAROON, fill_opacity=1).shift([3, 1, 0]).scale(0.75)
+        text_2 = Text("Turbine", color=WHITE).next_to(turbine, DOWN, buff=0.1).scale(0.5)
+        self.play(Create(turbine), Write(text_2))
+        
+        line = Line([-4, -1.5, 0], [-4, 1, 0], color=BLUE_A)
+        text_3 = Text("Steam", color=WHITE).next_to(line, RIGHT, buff=0.1).scale(0.5)
+        arrow = Arrow([-4.268, 1, 0], [1.70, 1, 0], color=BLUE_A, stroke_width=4)
+        
+        self.wait(1)
+        self.play(Succession(Create(line), GrowArrow(arrow), rate_functions=linear), Write(text_3), rate_functions=[linear, linear])
+        self.wait(1)
+        
+        
+class magneticfield(ThreeDScene):
+    def construct(self):
+        func = lambda pos: -pos[1]*RIGHT+pos[0]*UP  
+        mob = ArrowVectorField(func)  
+        arrow = Arrow3D([0, 0, -2], [0, 0, 2], color=RED)
+        arrow_text = MathTex(r"\vec{B}", color=WHITE).next_to(arrow, Z_AXIS, buff=0.5).rotate(PI/2, axis=X_AXIS)
+        self.add(mob, arrow, arrow_text) 
+        
+        self.move_camera(phi=PI/4, zoom=1.5)
+        
+        self.wait(3)
+
+class windAndWater(Scene):
+    def construct(self):
+        turbine = RoundedRectangle(height=2, width=1, color=MAROON, fill_opacity=1, corner_radius=0.1).shift([2, 0, 0])
+        text = Text("Turbine", color=WHITE).next_to(turbine, DOWN, buff=0.1).scale(0.5)
+        self.play(Create(turbine), Write(text))
+        self.wait(1)
+        
+        arrow = Arrow([-3, 0, 0], [1, 0, 0], color=BLUE_D)
+        text_2 = Text("Air/Water Flow", color=WHITE).next_to(arrow, UP, buff=0.1).scale(0.5)
+        self.play(GrowArrow(arrow), Write(text_2))
+        self.wait(1)

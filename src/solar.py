@@ -35,21 +35,30 @@ class SolarCell(ThreeDScene):
         )
         self.wait(1)
 
-        desc = Text(
-            "The main mechanism behind this: silicon semiconducting films.",
-            width=5,
-        ).scale(0.5).to_corner(UL + DOWN * 0.25)
-        self.add_fixed_in_frame_mobjects(desc)
-        self.play(
-            Write(desc)
+        desc = (
+            Text(
+                "The main mechanism behind this: silicon semiconducting films.",
+                width=10,
+            )
+            .to_corner(UL + DOWN * 0.25)
         )
+        self.add_fixed_in_frame_mobjects(desc)
+        self.play(Write(desc))
         self.wait(1)
         self.play(FadeIn(solar_cell))
-        self.play(Rotate(layers, angle=2 * PI, about_point=ORIGIN), FadeOut(desc), run_time=5)
+        self.play(
+            Rotate(layers, angle=2 * PI, about_point=ORIGIN),
+            FadeOut(desc),
+            run_time=5,
+        )
 
-        ray = Arrow(start=UP * 5 + LEFT * 5, end=ORIGIN, color=YELLOW, stroke_width=10)
-        light = Text("Light ray",width=2.5).next_to(ray, LEFT).scale(.75)
-        self.add_fixed_in_frame_mobjects(ray,light)
-        self.play(GrowArrow(ray),Write(light))
+        ray = Arrow(
+            start=UP * 5 + LEFT * 5, end=ORIGIN, color=YELLOW, stroke_width=10
+        )
+        light = (
+            Text("Light ray", width=2.5).next_to(ray, LEFT * 0.5).scale(0.75)
+        )
+        self.add_fixed_in_frame_mobjects(ray, light)
+        self.play(GrowArrow(ray), Write(light))
         self.wait(1)
         self.play(FadeOut(ray), FadeOut(light))

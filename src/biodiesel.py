@@ -36,7 +36,7 @@ class TwoDMoleculeScene(Scene):
         f_grp = VGroup()
         fame = MMoleculeObject.from_mol_file(os.path.join(mols, "FAME.mol"))
         f_grp.add(fame)
-        f_text = Text("Methyl Ester", color=WHITE).next_to(fame, DOWN)
+        f_text = Text("Methyl ester", color=WHITE).next_to(fame, DOWN)
         f_grp.add(f_text)
         self.play(Create(f_grp))
         self.wait(1)
