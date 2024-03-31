@@ -191,7 +191,7 @@ class Generator(ThreeDScene):
         magnet_right = Prism(dimensions=[1, 8, 2], fill_color=BLUE, stroke_width=1).shift([5, 0, 0])
         self.add(magnet_left, magnet_right)
         note = Text("Note: This is an AC generator", color=WHITE, font_size=25).to_edge(DOWN).rotate(-PI / 4, axis=RIGHT)
-        self.play(Rotate(wires, angle=24 * PI, axis=UP, run_time=24, rate_func=linear), Write(note))
+        self.play(Rotate(wires, angle=-24 * PI, axis=UP, run_time=24, rate_func=linear), Write(note))
 
 class MaxwellEq(Scene):
     def construct(self):

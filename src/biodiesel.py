@@ -92,3 +92,37 @@ class Example(Scene):
                 }
             )
             self.add(number_plane)
+
+class methyl(Scene):
+    def construct(self):
+        methyl = MMoleculeObject.from_mol_file("molfiles/FAME.mol")
+        text = Text("Methyl Ester", color=WHITE).next_to(methyl, DOWN).scale(0.75)
+        self.play(Create(methyl), Write(text))
+        self.play(Transform(methyl, methyl.copy().shift(UP * 0.5)), Transform(text, text.copy().shift(UP * 0.5)))
+        text_2 = Text("(Biodiesel)", color=WHITE).next_to(text, DOWN).scale(0.5)
+        
+        self.play(Write(text_2))
+        self.wait(1)
+
+class trans(Scene):
+    def construct(self):
+        text = Text("Transesterification", color=WHITE).scale(1.5)
+        self.play(Write(text))
+        self.wait(1)
+
+class trigly(ThreeDScene):
+    def construct(self):
+        triglyceride = MMoleculeObject.from_mol_file("molfiles/triglyceride.mol")
+        self.add(triglyceride)
+        self.play(Rotate(triglyceride, run_time=10, axis=Y_AXIS, angle=PI, rate_func = linear))
+        self.wait()
+        
+class Combustion2(Scene):
+    def construct(self):
+        combustion = MathTex(r"C_xH_y+(x+\frac{y}{4})O_2\to xCO_2+\frac{y}{2}H_2O")
+        self.play(Write(combustion))
+        self.wait(1)
+        self.play(FadeOut(combustion[0][:15]), FadeOut(combustion[0][19:]))
+        self.wait(1)
+        self.play(Transform(combustion[0][15:19], combustion[0][15:19].copy().move_to([0, 0, 0])))
+        self.wait(1)
