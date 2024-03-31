@@ -45,12 +45,14 @@ class SolarCell(ThreeDScene):
             width=5,
         ).scale(2).to_corner(UL + DOWN * 0.25)
         self.add_fixed_in_frame_mobjects(desc)
-        self.play(
-            Write(desc)
-        )
+        self.play(Write(desc))
         self.wait(1)
         self.play(FadeIn(solar_cell))
-        self.play(Rotate(layers, angle=2 * PI, about_point=ORIGIN), FadeOut(desc), run_time=5)
+        self.play(
+            Rotate(layers, angle=2 * PI, about_point=ORIGIN),
+            FadeOut(desc),
+            run_time=5,
+        )
 
         ray = Arrow(start=UP * 5 + LEFT * 5, end=ORIGIN, color=YELLOW, stroke_width=10)
         light = Text("Light ray").move_to(UP * 2 + LEFT * 3.5).scale(0.75)
